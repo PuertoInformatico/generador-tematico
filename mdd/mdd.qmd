@@ -1,0 +1,38 @@
+<!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
+<qgis version="3.44.8-Solothurn">
+  <identifier>Limite_MDD_2017_Union1</identifier>
+  <parentidentifier></parentidentifier>
+  <language>SPA</language>
+  <type>dataset</type>
+  <title>Limite_MDD_2017_Union1</title>
+  <abstract>REQUIRED: A brief narrative summary of the data set.
+
+REQUIRED: A summary of the intentions with which the data set was developed.</abstract>
+  <keywords vocabulary="gmd:topicCategory">
+    <keyword>REQUIRED: Common-use word or phrase used to describe the subject of the data set.</keyword>
+  </keywords>
+  <links>
+    <link name="Personal GeoDatabase Feature Class" format="" mimeType="" type="Local Area Network" url="file://\\ADMIN-PC\D$\POT_2011\MAPA BASE\GEODATABASE\POT_2011.mdb" description="" size=""/>
+  </links>
+  <dates/>
+  <fees></fees>
+  <constraints type="Acceso">REQUIRED: Restrictions and legal prerequisites for accessing the data set.</constraints>
+  <rights>REQUIRED: Restrictions and legal prerequisites for using the data set after access is granted.</rights>
+  <encoding></encoding>
+  <crs>
+    <spatialrefsys nativeFormat="Wkt">
+      <wkt></wkt>
+      <proj4>+proj=utm +zone=19 +south +datum=WGS84 +units=m +no_defs</proj4>
+      <srsid>3169</srsid>
+      <srid>32719</srid>
+      <authid>EPSG:32719</authid>
+      <description>WGS 84 / UTM zone 19S</description>
+      <projectionacronym>utm</projectionacronym>
+      <ellipsoidacronym>EPSG:7030</ellipsoidacronym>
+      <geographicflag>false</geographicflag>
+    </spatialrefsys>
+  </crs>
+  <extent>
+    <spatial minx="-81.32838999999999885" maxz="0" dimensions="2" maxy="-0.03861" miny="-18.35123000000000104" crs="EPSG:32719" minz="0" maxx="-68.65340000000000487"/>
+  </extent>
+</qgis>

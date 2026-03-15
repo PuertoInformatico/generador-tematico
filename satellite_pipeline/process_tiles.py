@@ -35,7 +35,7 @@ from pyproj import Transformer
 ROOT       = Path(__file__).parent.parent
 INPUT_DIR  = ROOT / "raw_scenes"
 OUTPUT_DIR = ROOT / "processed_tiles"
-SHAPEFILE  = Path(__file__).parent / "cut" / "mdd" / "mdd.shp"
+SHAPEFILE  = Path(__file__).parent / "mdd" / "mdd.shp"
 
 TARGET_BANDS   = ["B02", "B03", "B04", "B08"]
 OPTIONAL_BANDS = ["SCL"]
