@@ -1,0 +1,22 @@
+# Entorno virtual
+venv/
+.env
+
+# Datos descargados y generados por el pipeline
+raw_scenes/
+processed_tiles/
+composite_tiles/
+regional_mosaic/
+
+# Datos del pipeline antiguo (satellite_pipeline/*/data_*)
+satellite_pipeline/**/data_raw/
+satellite_pipeline/**/data_processed/
+satellite_pipeline/**/data_cut/
+satellite_pipeline/**/data_stack/
+satellite_pipeline/**/data_composite/
+satellite_pipeline/**/data_indices/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo

@@ -1,0 +1,11 @@
+venv\Scripts\activate
+
+# Ejecutar todo el pipeline (incremental):
+python satellite_pipeline/run_pipeline.py
+
+# O paso a paso:
+python satellite_pipeline/download.py
+python satellite_pipeline/process_tiles.py
+python satellite_pipeline/composite_tiles.py
+python satellite_pipeline/mosaic.py
+python satellite_pipeline/classify.py
