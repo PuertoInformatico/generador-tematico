@@ -1,4 +1,15 @@
+# conda
+
+conda create --name landcover python=3.13
+conda activate landcover
+
+# venv
+
 venv\Scripts\activate
+
+#
+
+pip install -r requirements.txt
 
 # Ejecutar todo el pipeline (incremental):
 python satellite_pipeline/run_pipeline.py

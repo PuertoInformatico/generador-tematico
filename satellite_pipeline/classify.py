@@ -49,36 +49,51 @@ def main():
     print(f"Clasificando: {INPUT_PATH.name}")
 
     with rasterio.open(INPUT_PATH) as src:
-        red     = src.read(BAND_RED).astype("float32")
-        nir     = src.read(BAND_NIR).astype("float32")
         profile = src.profile.copy()
         nodata  = src.nodata or 0
-
-    no_data_mask = (red == nodata) & (nir == nodata)
-
-    denom = nir + red
-    with np.errstate(invalid="ignore", divide="ignore"):
-        ndvi = np.where(denom == 0, np.nan, (nir - red) / denom)
-
-    lc = np.zeros_like(ndvi, dtype="uint8")
-    lc[ndvi > THRESHOLDS["bosque"]]                                              = 1
-    lc[(ndvi > THRESHOLDS["vegetacion"]) & (ndvi <= THRESHOLDS["bosque"])]      = 2
-    lc[(ndvi > THRESHOLDS["suelo"])      & (ndvi <= THRESHOLDS["vegetacion"])]  = 3
-    lc[(~np.isnan(ndvi)) & (ndvi <= THRESHOLDS["suelo"])]                       = 4
-    lc[no_data_mask] = 0
-
-    total = lc.size
-    for cat, label in LABELS.items():
-        n = (lc == cat).sum()
-        print(f"  {label:16s} {100 * n / total:5.1f}%  ({n:,} px)")
 
     profile.update(
         count=1, dtype="uint8", nodata=0,
         compress="lzw", tiled=True, blockxsize=256, blockysize=256,
     )
-    with rasterio.open(OUTPUT_PATH, "w", **profile) as dst:
-        dst.write(lc[np.newaxis, ...])
+
+    counts = {cat: 0 for cat in LABELS}
+    total  = 0
+
+    with rasterio.open(INPUT_PATH) as src, rasterio.open(OUTPUT_PATH, "w", **profile) as dst:
         dst.update_tags(1, categories="0=sin_dato,1=bosque,2=vegetacion,3=suelo,4=agua_mineria")
+        windows = list(src.block_windows(1))
+        n_wins  = len(windows)
+        for idx, (_, win) in enumerate(windows, 1):
+            if idx % 500 == 0 or idx == n_wins:
+                print(f"  bloque {idx}/{n_wins}", end="\r")
+
+            red = src.read(BAND_RED, window=win).astype("float32")
+            nir = src.read(BAND_NIR, window=win).astype("float32")
+
+            no_data_mask = (red == nodata) & (nir == nodata)
+
+            denom = nir + red
+            with np.errstate(invalid="ignore", divide="ignore"):
+                ndvi = np.where(denom == 0, np.nan, (nir - red) / denom)
+
+            lc = np.zeros(red.shape, dtype="uint8")
+            lc[ndvi > THRESHOLDS["bosque"]]                                             = 1
+            lc[(ndvi > THRESHOLDS["vegetacion"]) & (ndvi <= THRESHOLDS["bosque"])]     = 2
+            lc[(ndvi > THRESHOLDS["suelo"])      & (ndvi <= THRESHOLDS["vegetacion"])] = 3
+            lc[(~np.isnan(ndvi)) & (ndvi <= THRESHOLDS["suelo"])]                      = 4
+            lc[no_data_mask] = 0
+
+            dst.write(lc[np.newaxis, ...], window=win)
+
+            for cat in LABELS:
+                counts[cat] += int((lc == cat).sum())
+            total += lc.size
+
+    print()  # salto de línea tras el contador
+    for cat, label in LABELS.items():
+        n = counts[cat]
+        print(f"  {label:16s} {100 * n / total:5.1f}%  ({n:,} px)")
 
     print(f"\nLandcover guardado: {OUTPUT_PATH}")
 
