@@ -55,6 +55,7 @@ def search_scenes(token: str) -> list[dict]:
         "datetime": (f"{start.strftime('%Y-%m-%dT%H:%M:%SZ')}/"
                      f"{now.strftime('%Y-%m-%dT%H:%M:%SZ')}"),
         "query":   {"eo:cloud_cover": {"lt": MAX_CLOUD}},
+        "sortby":  [{"field": "properties.eo:cloud_cover", "direction": "asc"}],
     }
     r = requests.post(
         "https://catalogue.dataspace.copernicus.eu/stac/search",
